@@ -1,29 +1,19 @@
+import { Routes, Route } from 'react-router-dom';
+import Auth from './routes/Auth';
+import Home from './routes/Home';
+import Profile from './routes/Profile';
 
-import { useState } from "react";
-import { BrowserRouter, Router, Routes, Route } from "react-router-dom";
-import Auth from "./routes/Auth";
-import Home from "./routes/Home"
-
-const AppRouter = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const AppRouter = ({ isLoggedIn }) => {
   return (
-    <BrowserRouter>
-      <Router>
-        <Routes>
-          {isLoggedIn ? (
-            <>
-          <Route path={"/"} element={<Home />} />
-          </>
-              ): (
-              <>
-          <Route path={"/"} element={<Auth />} />
-            </>
-        )}
-        </Routes>
-      </Router>
-    </BrowserRouter>
-    
-  )
-}
+    <Routes>
+      {isLoggedIn ? (
+        <Route path={'/'} element={<Home />} exact={true} />
+      ) : (
+        <Route path={'/'} element={<Auth />} exact={true} />
+      )}
+      <Route path="/profile" element={<Profile />} />
+    </Routes>
+  );
+};
 
 export default AppRouter;
