@@ -29,14 +29,12 @@ const Auth = () => {
     try {
       let data;
       if (newAccount) {
-        // create account
         data = await createUserWithEmailAndPassword(
           authService,
           email,
           password,
         );
       } else {
-        // Log in
         data = await signInWithEmailAndPassword(authService, email, password);
       }
     } catch (error) {
@@ -47,7 +45,6 @@ const Auth = () => {
 
   const toggleAccount = () => setNewAccount((prev) => !prev);
   const onSocialClick = async (event) => {
-    console.log(event.target.name);
     const {
       target: { name },
     } = event;
