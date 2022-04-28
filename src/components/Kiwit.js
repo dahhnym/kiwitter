@@ -47,6 +47,7 @@ const Kiwit = ({ kiwitObj, isOwner }) => {
       ) : (
         <>
           <p>{kiwitObj.text}</p>
+          <img src={kiwitObj.attachmentUrl} width="100px" alt="" />
           {isOwner && (
             <>
               <button onClick={onDeleteClick}>Delete Kiwit</button>

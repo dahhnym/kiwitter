@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { dbService } from 'fbase';
+import { dbService, storageService } from 'fbase';
 import {
   addDoc,
   collection,
@@ -8,10 +8,13 @@ import {
   orderBy,
 } from 'firebase/firestore';
 import Kiwit from 'components/Kiwit';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
 
 const Home = ({ userObj }) => {
   const [kiwit, setKiwit] = useState('');
   const [kiwits, setKiwits] = useState([]);
+  const [attachment, setAttachment] = useState('');
 
   const getKiwits = async () => {
     const q = query(
@@ -20,8 +23,8 @@ const Home = ({ userObj }) => {
     );
     onSnapshot(q, (snapshot) => {
       const kiwitArr = snapshot.docs.map((doc) => ({
-        ...doc.data(),
         id: doc.id,
+        ...doc.data(),
       }));
       setKiwits(kiwitArr);
     });
@@ -33,19 +36,45 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    let attachmentUrl = '';
+    if (attachment !== '') {
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      await uploadString(attachmentRef, attachment, 'data_url');
+      attachmentUrl = await getDownloadURL(attachmentRef);
+    }
     await addDoc(collection(dbService, 'kiwits'), {
       text: kiwit,
       createdAt: Date.now(),
       creatorId: userObj.uid,
+      attachmentUrl,
     });
     setKiwit('');
+    setAttachment('');
   };
+
   const onChange = (event) => {
     const {
       target: { value },
     } = event;
     setKiwit(value);
   };
+
+  const onFileChange = (event) => {
+    const {
+      target: { files },
+    } = event;
+    const theFile = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setAttachment(result);
+    };
+    reader.readAsDataURL(theFile);
+  };
+
+  const onClearAttachment = () => setAttachment(null);
 
   return (
     <div>
@@ -57,7 +86,14 @@ const Home = ({ userObj }) => {
           onChange={onChange}
           value={kiwit}
         />
+        <input type="file" accept="image/*" onChange={onFileChange} />
         <input type="submit" value="Kiwit" />
+        {attachment && (
+          <div>
+            <img src={attachment} width="50px" alt="" />
+            <button onClick={onClearAttachment}>Clear</button>
+          </div>
+        )}
       </form>
       <div>
         {kiwits.map((kiwit) => {
