@@ -1,29 +1,34 @@
-import { dbService } from 'fbase';
+import { dbService, storageService } from 'fbase';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { ref, deleteObject } from 'firebase/storage';
 import { useState } from 'react';
 
-const Kiwit = ({ kiwitObj, isOwner }) => {
+const Kiwit = ({ kiweetObj, isOwner }) => {
   const [editing, setEditing] = useState(false);
-  const [newKiwit, setNewKiwit] = useState(kiwitObj.text);
-  const KiwitTextRef = doc(dbService, 'kiwits', `${kiwitObj.id}`);
+  const [newKiweet, setNewKiweet] = useState(kiweetObj.text);
+  const KiwitTextRef = doc(dbService, 'kiwits', `${kiweetObj.id}`);
+  const attachmentUrlRef = ref(storageService, kiweetObj.attachmentUrl);
+
   const onDeleteClick = async () => {
     const ok = window.confirm('Are you sure you want to delete this kiwit?');
     if (ok) {
       await deleteDoc(KiwitTextRef);
+      await deleteObject(attachmentUrlRef);
     }
   };
+
   const toggleEditing = () => setEditing((prev) => !prev);
+
   const onSubmit = async (event) => {
     event.preventDefault();
-    console.log(kiwitObj, newKiwit);
-    await updateDoc(KiwitTextRef, { text: newKiwit });
+    await updateDoc(KiwitTextRef, { text: newKiweet });
     setEditing(false);
   };
   const onChange = (event) => {
     const {
       target: { value },
     } = event;
-    setNewKiwit(value);
+    setNewKiweet(value);
   };
   return (
     <div>
@@ -33,7 +38,7 @@ const Kiwit = ({ kiwitObj, isOwner }) => {
             <>
               <form onSubmit={onSubmit}>
                 <input
-                  value={newKiwit}
+                  value={newKiweet}
                   required
                   placeholder="Edit your kiwit"
                   onChange={onChange}
@@ -46,12 +51,12 @@ const Kiwit = ({ kiwitObj, isOwner }) => {
         </>
       ) : (
         <>
-          <p>{kiwitObj.text}</p>
-          <img src={kiwitObj.attachmentUrl} width="100px" alt="" />
+          <p>{kiweetObj.text}</p>
+          <img src={kiweetObj.attachmentUrl} width="100px" alt="" />
           {isOwner && (
             <>
-              <button onClick={onDeleteClick}>Delete Kiwit</button>
-              <button onClick={toggleEditing}>Edit Kiwit</button>
+              <button onClick={onDeleteClick}>Delete Kiweet</button>
+              <button onClick={toggleEditing}>Edit Kiweet</button>
             </>
           )}
         </>
