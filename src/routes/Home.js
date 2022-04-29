@@ -7,31 +7,31 @@ import {
   onSnapshot,
   orderBy,
 } from 'firebase/firestore';
-import Kiwit from 'components/Kiwit';
+import Kiwit from 'components/Kiweet';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 
 const Home = ({ userObj }) => {
-  const [kiwit, setKiwit] = useState('');
-  const [kiwits, setKiwits] = useState([]);
+  const [kiweet, setKiweet] = useState('');
+  const [kiweets, setKiweets] = useState([]);
   const [attachment, setAttachment] = useState('');
 
-  const getKiwits = async () => {
+  const getKiweets = async () => {
     const q = query(
-      collection(dbService, 'kiwits'),
+      collection(dbService, 'kiweets'),
       orderBy('createdAt', 'desc'),
     );
     onSnapshot(q, (snapshot) => {
-      const kiwitArr = snapshot.docs.map((doc) => ({
+      const kiweetArr = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setKiwits(kiwitArr);
+      setKiweets(kiweetArr);
     });
   };
 
   useEffect(() => {
-    getKiwits();
+    getKiweets();
   }, []);
 
   const onSubmit = async (event) => {
@@ -42,13 +42,13 @@ const Home = ({ userObj }) => {
       await uploadString(attachmentRef, attachment, 'data_url');
       attachmentUrl = await getDownloadURL(attachmentRef);
     }
-    await addDoc(collection(dbService, 'kiwits'), {
-      text: kiwit,
+    await addDoc(collection(dbService, 'kiweets'), {
+      text: kiweet,
       createdAt: Date.now(),
       creatorId: userObj.uid,
       attachmentUrl,
     });
-    setKiwit('');
+    setKiweet('');
     setAttachment('');
   };
 
@@ -56,7 +56,7 @@ const Home = ({ userObj }) => {
     const {
       target: { value },
     } = event;
-    setKiwit(value);
+    setKiweet(value);
   };
 
   const onFileChange = (event) => {
@@ -84,10 +84,10 @@ const Home = ({ userObj }) => {
           placeholder="What's on your mind?"
           maxLength={120}
           onChange={onChange}
-          value={kiwit}
+          value={kiweet}
         />
         <input type="file" accept="image/*" onChange={onFileChange} />
-        <input type="submit" value="Kiwit" />
+        <input type="submit" value="Kiweet" />
         {attachment && (
           <div>
             <img src={attachment} width="50px" alt="" />
@@ -96,12 +96,12 @@ const Home = ({ userObj }) => {
         )}
       </form>
       <div>
-        {kiwits.map((kiwit) => {
+        {kiweets.map((kiweet) => {
           return (
             <Kiwit
-              key={kiwit.id}
-              kiwitObj={kiwit}
-              isOwner={kiwit.creatorId === userObj.uid}
+              key={kiweet.id}
+              kiweetObj={kiweet}
+              isOwner={kiweet.creatorId === userObj.uid}
             />
           );
         })}
