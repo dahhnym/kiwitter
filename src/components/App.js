@@ -2,6 +2,7 @@ import AppRouter from './Router';
 import { useEffect, useState } from 'react';
 import { authService } from 'fbase';
 import Navigation from './Navigation';
+import 'App.css';
 
 function App() {
   const [init, setInit] = useState(false);
@@ -15,6 +16,8 @@ function App() {
           uid: user.uid,
           updateProfile: (args) => user.updateProfile(args),
         });
+      } else {
+        setUserObj(null);
       }
       setInit(true);
     });
