@@ -8,6 +8,7 @@ import AuthForm from 'components/AuthForm';
 import styled from 'styled-components';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 
 const Auth = () => {
   const onSocialClick = async (event) => {
@@ -66,7 +67,6 @@ const ImgContainer = styled.div`
   align-items: center;
   justify-content: center;
   grid-column: 1/2;
-  background-color: #d6eaed;
   height: inherit;
   img {
     max-width: 20vw;
@@ -75,6 +75,58 @@ const ImgContainer = styled.div`
   }
   @media screen and (max-width: 500px) {
     grid-row: 2/3;
+  }
+  background: #d6eaed url('https://wallpaperaccess.com/full/1994929.jpg') repeat
+    0 0;
+  -webkit-animation: 30s linear 0s normal none infinite animate;
+  -moz-animation: 30s linear 0s normal none infinite animate;
+  -ms-animation: 30s linear 0s normal none infinite animate;
+  -o-animation: 30s linear 0s normal none infinite animate;
+  animation: 30s linear 0s normal none infinite animate;
+
+  @-webkit-keyframes animate {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 1000px 0;
+    }
+  }
+
+  @-moz-keyframes animate {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 1000px 0;
+    }
+  }
+
+  @-ms-keyframes animate {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 1000px 0;
+    }
+  }
+
+  @-o-keyframes animate {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 1000px 0;
+    }
+  }
+
+  @keyframes animate {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 1000px 0;
+    }
   }
 `;
 
@@ -117,7 +169,7 @@ const SignUpButton = styled.button`
   font-size: 1rem;
   &:hover {
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(224, 224, 224, 0.5);
     border: solid 1px transparent;
     transition: 0.1s;
   }
@@ -150,3 +202,9 @@ const SignInButton = styled(SignUpButton)`
     background-color: rgba(222, 238, 241, 0.8);
   }
 `;
+
+Text.propTypes = {
+  fontSize: PropTypes.string,
+  marginBottom: PropTypes.string,
+  marginTop: PropTypes.string,
+};
