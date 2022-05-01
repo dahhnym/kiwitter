@@ -1,21 +1,16 @@
-import { dbService, storageService } from 'fbase';
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { ref, deleteObject } from 'firebase/storage';
+import { dbService } from 'fbase';
+import { doc, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
+import styled from 'styled-components';
+import { Text } from 'routes/Auth';
+import { BsThreeDots } from 'react-icons/bs';
+import KiweetMenu from './KiweetMenu';
+import { timeStamp } from 'utils/timeStamp';
 
-const Kiwit = ({ kiweetObj, isOwner }) => {
+const Kiweet = ({ kiweetObj, isOwner }) => {
   const [editing, setEditing] = useState(false);
   const [newKiweet, setNewKiweet] = useState(kiweetObj.text);
   const KiwitTextRef = doc(dbService, 'kiwits', `${kiweetObj.id}`);
-  const attachmentUrlRef = ref(storageService, kiweetObj.attachmentUrl);
-
-  const onDeleteClick = async () => {
-    const ok = window.confirm('Are you sure you want to delete this kiwit?');
-    if (ok) {
-      await deleteDoc(KiwitTextRef);
-      await deleteObject(attachmentUrlRef);
-    }
-  };
 
   const toggleEditing = () => setEditing((prev) => !prev);
 
@@ -30,6 +25,7 @@ const Kiwit = ({ kiweetObj, isOwner }) => {
     } = event;
     setNewKiweet(value);
   };
+
   return (
     <div>
       {editing ? (
@@ -50,19 +46,69 @@ const Kiwit = ({ kiweetObj, isOwner }) => {
           )}
         </>
       ) : (
-        <>
-          <p>{kiweetObj.text}</p>
-          <img src={kiweetObj.attachmentUrl} width="100px" alt="" />
-          {isOwner && (
-            <>
-              <button onClick={onDeleteClick}>Delete Kiweet</button>
-              <button onClick={toggleEditing}>Edit Kiweet</button>
-            </>
+        <Wrapper>
+          <Author as="div" fontSize="0.9rem" marginBottom="0.8rem">
+            <span>작성자</span> &bull;{' '}
+            <time>{timeStamp(kiweetObj.createdAt)}</time>
+            {isOwner && (
+              <button>
+                {/* <KiweetMenu
+                toggleEditing={toggleEditing}
+                kiweetObj={kiweetObj}
+                KiwitTextRef={KiwitTextRef}
+              >
+                <BsThreeDots />
+              </KiweetMenu> */}
+                <BsThreeDots />
+              </button>
+            )}
+          </Author>
+          <KiweetText fontSize="1rem">{kiweetObj.text}</KiweetText>
+          {kiweetObj.attachmentUrl && (
+            <Img src={kiweetObj.attachmentUrl} alt="" />
           )}
-        </>
+        </Wrapper>
       )}
     </div>
   );
 };
 
-export default Kiwit;
+export default Kiweet;
+
+const KiweetText = styled(Text)`
+  line-height: 1.3rem;
+  & + div {
+    margin-bottom: 1rem;
+  }
+`;
+
+const Img = styled.img`
+  margin-top: 1.5rem;
+  border-radius: 1.5rem;
+  border: solid 1px #ccc;
+`;
+
+const Author = styled(Text)`
+  color: #bbb;
+  span {
+    color: #000;
+  }
+  button {
+    float: right;
+    svg {
+      padding: 0.2rem;
+      border-radius: 50%;
+      &:hover {
+        cursor: pointer;
+        background-color: rgba(222, 238, 241, 0.8);
+        color: #128b72;
+        transition: 0.2s;
+      }
+    }
+  }
+`;
+
+const Wrapper = styled.div`
+  padding: 1.5rem;
+  border-bottom: solid 1px #eee;
+`;
