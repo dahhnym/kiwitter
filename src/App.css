@@ -110,7 +110,7 @@ body {
   overflow-wrap: break-word;
 }
 
-/* Do not break Korean woords */
+/* Do not break Korean words */
 :lang(ko) {
   word-break: keep-all;
 }
