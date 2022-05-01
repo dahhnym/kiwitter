@@ -31,7 +31,12 @@ const Auth = () => {
         <img src={`${process.env.PUBLIC_URL}/full-logo.png`} alt="Kiwitter" />
       </ImgContainer>
       <AuthContainer>
-        <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="" />
+        <Logo
+          src={`${process.env.PUBLIC_URL}/logo.png`}
+          alt=""
+          size="3rem"
+          marginBottom="1rem"
+        />
         <Text fontSize="3rem" marginBottom="2.5rem">
           Happening now
         </Text>
@@ -137,10 +142,6 @@ const AuthContainer = styled.div`
   grid-column: 2/3;
   padding: 4rem;
   box-sizing: border-box;
-  img {
-    width: 3rem;
-    margin-bottom: 1rem;
-  }
   p {
     font-family: 'Kanit', sans-serif;
   }
@@ -154,7 +155,12 @@ const AuthContainer = styled.div`
   }
 `;
 
-const Text = styled.p`
+export const Logo = styled.img`
+  width: ${(props) => props.size};
+  margin-bottom: ${(props) => props.marginBottom};
+`;
+
+export const Text = styled.p`
   font-size: ${(props) => props.fontSize};
   margin-bottom: ${(props) => props.marginBottom};
   margin-top: ${(props) => props.marginTop};
