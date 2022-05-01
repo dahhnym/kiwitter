@@ -1,7 +1,7 @@
 import AppRouter from './Router';
 import { useEffect, useState } from 'react';
 import { authService } from 'fbase';
-import Navigation from './Navigation';
+
 import 'App.css';
 
 function App() {
@@ -35,7 +35,6 @@ function App() {
 
   return (
     <>
-      {Boolean(userObj) && <Navigation userObj={userObj} />}
       {init ? (
         <AppRouter
           isLoggedIn={Boolean(userObj)}
