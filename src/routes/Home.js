@@ -10,7 +10,6 @@ import {
 import Kiweet from 'components/Kiweet';
 import KiweetGenerator from 'components/KiweetGenerator';
 import styled from 'styled-components';
-import Navigation from 'components/Navigation';
 import { useLocation } from 'react-router-dom';
 import Profile from './Profile';
 
@@ -42,21 +41,19 @@ const Home = ({ userObj }) => {
         <KiweetGenerator userObj={userObj} />
         {kiweets.length !== 0 ? (
           <>
-            <KiweetsContainer>
-              {kiweets.map((kiweet) => {
-                return (
-                  <Kiweet
-                    key={kiweet.id}
-                    kiweetObj={kiweet}
-                    isOwner={kiweet.creatorId === userObj.uid}
-                    displayName={userObj.displayName}
-                  />
-                );
-              })}
-            </KiweetsContainer>
+            {kiweets.map((kiweet) => {
+              return (
+                <Kiweet
+                  key={kiweet.id}
+                  kiweetObj={kiweet}
+                  isOwner={kiweet.creatorId === userObj.uid}
+                  displayName={kiweet.displayName}
+                />
+              );
+            })}
           </>
         ) : (
-          <p>No Kiweets here. Please write your first Kiweet.</p>
+          <Message>No Kiweets here. Please write your first Kiweet.</Message>
         )}
       </HomeFeedContainer>
       {location.pathname === '/profile' && <Profile />}
@@ -78,6 +75,7 @@ export const HomeFeedContainer = styled.div`
   border-right: solid 1px #eee;
 `;
 
-const KiweetsContainer = styled.div`
-  /* position: relative; */
+const Message = styled.p`
+  margin: 1rem;
+  font-size: 1rem;
 `;

@@ -23,6 +23,7 @@ const KiweetGenerator = ({ userObj }) => {
       text: kiweet,
       createdAt: Date.now(),
       creatorId: userObj.uid,
+      displayName: userObj.displayName,
       attachmentUrl,
     });
     setKiweet('');
@@ -163,6 +164,7 @@ export const SubmitButton = styled.input`
   padding: 0 1.3rem;
   border-radius: 1.5rem;
   font-size: 0.9rem;
+  margin-top: ${(props) => props.marginTop};
   &:hover {
     cursor: pointer;
     background-color: rgb(16, 127, 103);

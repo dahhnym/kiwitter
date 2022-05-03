@@ -9,8 +9,13 @@ import styled from 'styled-components';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { BsArrowLeft } from 'react-icons/bs';
 
 const Auth = () => {
+  const [newAccount, setNewAccount] = useState(true);
+  const [isDisplay, setIsDisplay] = useState(false);
+
   const onSocialClick = async (event) => {
     const {
       target: { name },
@@ -22,7 +27,18 @@ const Auth = () => {
       provider = new GithubAuthProvider();
     }
     const data = await signInWithPopup(authService, provider);
-    console.log(data);
+  };
+
+  const toggleDisplay = (event) => {
+    const {
+      target: { name },
+    } = event;
+    if (name === 'SignUp') {
+      setNewAccount(true);
+    } else {
+      setNewAccount(false);
+    }
+    setIsDisplay((prev) => !prev);
   };
 
   return (
@@ -31,29 +47,48 @@ const Auth = () => {
         <img src={`${process.env.PUBLIC_URL}/full-logo.png`} alt="Kiwitter" />
       </ImgContainer>
       <AuthContainer>
-        <Logo
-          src={`${process.env.PUBLIC_URL}/logo.png`}
-          alt=""
-          size="3rem"
-          marginBottom="1rem"
-        />
+        {isDisplay ? (
+          <BackButton onClick={toggleDisplay}>
+            <BsArrowLeft fontSize={'2rem'} />
+          </BackButton>
+        ) : (
+          <Logo
+            src={`${process.env.PUBLIC_URL}/logo.png`}
+            alt=""
+            size="3rem"
+            marginBottom="1rem"
+          />
+        )}
+
         <Text fontSize="3rem" marginBottom="2.5rem">
           Happening now
         </Text>
         <Text fontSize="2rem" marginBottom="2rem">
           Join Kiwitter today.
         </Text>
-        <SignUpButton onClick={onSocialClick} name="google">
-          <FcGoogle />
-          Sign up with Google
-        </SignUpButton>
-        <SignUpButton onClick={onSocialClick} name="github">
-          <FaGithub />
-          Sign up with GitHub
-        </SignUpButton>
-        <SignUpWithEmailBtn>Sign up with email</SignUpWithEmailBtn>
-        <Text marginTop="2rem">Already have an account?</Text>
-        <SignInButton>Sign in</SignInButton>
+        <div>
+          {isDisplay ? (
+            <AuthForm newAccount={newAccount} setNewAccount={setNewAccount} />
+          ) : (
+            <>
+              <SignUpButton onClick={onSocialClick} name="google">
+                <FcGoogle />
+                Sign up with Google
+              </SignUpButton>
+              <SignUpButton onClick={onSocialClick} name="github">
+                <FaGithub />
+                Sign up with GitHub
+              </SignUpButton>
+              <SignUpWithEmailBtn name="SignUp" onClick={toggleDisplay}>
+                Sign up with email
+              </SignUpWithEmailBtn>
+              <Text marginTop="2rem">Already have an account?</Text>
+              <SignInButton name="SignIn" onClick={toggleDisplay}>
+                Sign in
+              </SignInButton>
+            </>
+          )}
+        </div>
       </AuthContainer>
     </Div>
   );
@@ -135,6 +170,12 @@ const ImgContainer = styled.div`
   }
 `;
 
+export const Text = styled.p`
+  font-size: ${(props) => props.fontSize};
+  margin-bottom: ${(props) => props.marginBottom};
+  margin-top: ${(props) => props.marginTop};
+`;
+
 const AuthContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -142,7 +183,7 @@ const AuthContainer = styled.div`
   grid-column: 2/3;
   padding: 4rem;
   box-sizing: border-box;
-  p {
+  ${Text} {
     font-family: 'Kanit', sans-serif;
   }
   @media screen and (max-width: 500px) {
@@ -158,12 +199,6 @@ export const Logo = styled.img`
   width: ${(props) => props.size};
   margin-bottom: ${(props) => props.marginBottom};
   margin-left: ${(props) => props.marginLeft};
-`;
-
-export const Text = styled.p`
-  font-size: ${(props) => props.fontSize};
-  margin-bottom: ${(props) => props.marginBottom};
-  margin-top: ${(props) => props.marginTop};
 `;
 
 const SignUpButton = styled.button`
@@ -206,6 +241,19 @@ const SignInButton = styled(SignUpButton)`
   margin-top: 1rem;
   &:hover {
     background-color: rgba(222, 238, 241, 0.8);
+  }
+`;
+
+const BackButton = styled.button`
+  align-self: flex-start;
+  border: solid 0px transparent;
+  box-sizing: border-box;
+  border-radius: 50%;
+  padding: 0.4rem 0.5rem;
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: 0.2s;
   }
 `;
 
