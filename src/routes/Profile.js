@@ -1,7 +1,6 @@
-import { authService, dbService } from 'fbase';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { authService } from 'fbase';
 import { deleteUser, updateProfile } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Main } from './Home';
@@ -12,26 +11,11 @@ const Profile = ({ userObj, refreshUser }) => {
   const navigate = useNavigate();
   const [newDisplayName, setnewDisplayName] = useState(userObj.displayName);
   const [display, setDisplay] = useState(false);
-  const [myKiweets, setMyKiweets] = useState([]);
 
   const onLogOutClick = () => {
     authService.signOut();
     navigate('/');
   };
-
-  const getMyKiweets = async () => {
-    const q = query(
-      collection(dbService, 'kiweets'),
-      where('creatorId', '==', userObj.uid),
-      orderBy('createdAt', 'desc'),
-    );
-    let querySnapshot = await getDocs(q);
-    // querySnapshot.forEach((doc) => console.log(doc.id, '=>', doc.data()));
-  };
-
-  useEffect(() => {
-    getMyKiweets();
-  }, []);
 
   const onChange = (event) => {
     const {
