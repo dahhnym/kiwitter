@@ -86,6 +86,7 @@ export default Kiweet;
 
 const KiweetText = styled(Text)`
   line-height: 1.3rem;
+  white-space: pre-wrap;
   & + div {
     margin-bottom: 1rem;
   }
