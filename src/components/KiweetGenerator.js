@@ -23,6 +23,7 @@ const KiweetGenerator = ({ userObj }) => {
       text: kiweet,
       createdAt: Date.now(),
       creatorId: userObj.uid,
+      displayName: userObj.displayName,
       attachmentUrl,
     });
     setKiweet('');
