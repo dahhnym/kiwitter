@@ -49,6 +49,7 @@ const Home = ({ userObj }) => {
                     key={kiweet.id}
                     kiweetObj={kiweet}
                     isOwner={kiweet.creatorId === userObj.uid}
+                    displayName={userObj.displayName}
                   />
                 );
               })}
@@ -58,7 +59,7 @@ const Home = ({ userObj }) => {
           <p>No Kiweets here. Please write your first Kiweet.</p>
         )}
       </HomeFeedContainer>
-      ){location.pathname === '/profile' && <Profile />}
+      {location.pathname === '/profile' && <Profile />}
     </Main>
   );
 };
@@ -66,7 +67,7 @@ const Home = ({ userObj }) => {
 export default Home;
 
 export const Main = styled.main`
-  max-width: 1024px;
+  width: 1024px;
   @media screen and (max-width: 500px) {
     min-width: 100%;
   }
@@ -78,5 +79,5 @@ export const HomeFeedContainer = styled.div`
 `;
 
 const KiweetsContainer = styled.div`
-  /* border-bottom: solid 1px #eee; */
+  /* position: relative; */
 `;

@@ -6,14 +6,19 @@ import { Text } from 'routes/Auth';
 import { BsThreeDots } from 'react-icons/bs';
 import KiweetMenu from './KiweetMenu';
 import { timeStamp } from 'utils/timeStamp';
+import { SubmitButton } from './KiweetGenerator';
 
-const Kiweet = ({ kiweetObj, isOwner }) => {
+const Kiweet = ({ kiweetObj, isOwner, displayName }) => {
   const [editing, setEditing] = useState(false);
   const [newKiweet, setNewKiweet] = useState(kiweetObj.text);
-  const KiwitTextRef = doc(dbService, 'kiwits', `${kiweetObj.id}`);
+  const KiwitTextRef = doc(dbService, 'kiweets', `${kiweetObj.id}`);
+  const [open, setOpen] = useState(false);
 
-  const toggleEditing = () => setEditing((prev) => !prev);
-
+  const toggleOpen = () => setOpen((prev) => !prev);
+  const toggleEditing = () => {
+    setEditing((prev) => !prev);
+    toggleOpen();
+  };
   const onSubmit = async (event) => {
     event.preventDefault();
     await updateDoc(KiwitTextRef, { text: newKiweet });
@@ -28,47 +33,51 @@ const Kiweet = ({ kiweetObj, isOwner }) => {
 
   return (
     <div>
-      {editing ? (
-        <>
+      <Wrapper>
+        <Author as="div" fontSize="0.9rem" marginBottom="0.8rem">
+          <span>{displayName}</span> &bull;{' '}
+          <time>{timeStamp(kiweetObj.createdAt)}</time>
           {isOwner && (
-            <>
-              <form onSubmit={onSubmit}>
-                <input
-                  value={newKiweet}
-                  required
-                  placeholder="Edit your kiwit"
-                  onChange={onChange}
-                />
-                <input type="submit" value="Update Kiwit" />
-              </form>
-              <button onClick={toggleEditing}>Cancel</button>
-            </>
+            <MenuButton onClick={toggleOpen}>
+              {open ? null : <BsThreeDots />}
+            </MenuButton>
           )}
-        </>
-      ) : (
-        <Wrapper>
-          <Author as="div" fontSize="0.9rem" marginBottom="0.8rem">
-            <span>작성자</span> &bull;{' '}
-            <time>{timeStamp(kiweetObj.createdAt)}</time>
+          {open ? (
+            <KiweetMenu
+              toggleEditing={toggleEditing}
+              kiweetObj={kiweetObj}
+              KiwitTextRef={KiwitTextRef}
+              isOpen={open}
+              toggleOpen={toggleOpen}
+            />
+          ) : null}
+        </Author>
+        {editing ? (
+          <>
             {isOwner && (
-              <button>
-                {/* <KiweetMenu
-                toggleEditing={toggleEditing}
-                kiweetObj={kiweetObj}
-                KiwitTextRef={KiwitTextRef}
-              >
-                <BsThreeDots />
-              </KiweetMenu> */}
-                <BsThreeDots />
-              </button>
+              <>
+                <EditForm onSubmit={onSubmit}>
+                  <TextInput
+                    value={newKiweet}
+                    required
+                    placeholder="Edit your kiwit"
+                    onChange={onChange}
+                  />
+                  <ButtonWrapper>
+                    <SubmitButton type="submit" value="Update" />
+                    <CancelButton onClick={toggleEditing}>Cancel</CancelButton>
+                  </ButtonWrapper>
+                </EditForm>
+              </>
             )}
-          </Author>
+          </>
+        ) : (
           <KiweetText fontSize="1rem">{kiweetObj.text}</KiweetText>
-          {kiweetObj.attachmentUrl && (
-            <Img src={kiweetObj.attachmentUrl} alt="" />
-          )}
-        </Wrapper>
-      )}
+        )}
+        {kiweetObj.attachmentUrl && (
+          <Img src={kiweetObj.attachmentUrl} alt="" />
+        )}
+      </Wrapper>
     </div>
   );
 };
@@ -93,17 +102,18 @@ const Author = styled(Text)`
   span {
     color: #000;
   }
-  button {
-    float: right;
-    svg {
-      padding: 0.2rem;
-      border-radius: 50%;
-      &:hover {
-        cursor: pointer;
-        background-color: rgba(222, 238, 241, 0.8);
-        color: #128b72;
-        transition: 0.2s;
-      }
+`;
+
+const MenuButton = styled.button`
+  float: right;
+  svg {
+    padding: 0.2rem;
+    border-radius: 50%;
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(222, 238, 241, 0.8);
+      color: #128b72;
+      transition: 0.2s;
     }
   }
 `;
@@ -111,4 +121,37 @@ const Author = styled(Text)`
 const Wrapper = styled.div`
   padding: 1.5rem;
   border-bottom: solid 1px #eee;
+  position: relative;
+`;
+
+const EditForm = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TextInput = styled.textarea`
+  overflow-wrap: break-word;
+  width: inherit;
+  border-bottom: solid 1px #eee;
+  font-size: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const CancelButton = styled.button`
+  background-color: #eee;
+  font-size: 1rem;
+  padding: 0 1.3rem;
+  border-radius: 1.5rem;
+  margin-left: 0.5rem;
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(227, 227, 227);
+    transition: 0.2s;
+  }
 `;
