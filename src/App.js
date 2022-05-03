@@ -1,7 +1,7 @@
-import AppRouter from './Router';
+import AppRouter from './components/Router';
 import { useEffect, useState } from 'react';
 import { authService } from 'fbase';
-import Navigation from './Navigation';
+import Navigation from './components/Navigation';
 import styled from 'styled-components';
 import 'App.css';
 
