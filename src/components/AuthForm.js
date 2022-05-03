@@ -4,11 +4,12 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
+import styled from 'styled-components';
+import { SubmitButton } from './KiweetGenerator';
 
-const AuthForm = () => {
+const AuthForm = ({ newAccount, setNewAccount }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [newAccount, setNewAccount] = useState(true);
   const [error, setError] = useState('');
 
   const onChange = (event) => {
@@ -44,8 +45,8 @@ const AuthForm = () => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <input
+      <Form onSubmit={onSubmit}>
+        <TextInput
           name="email"
           type="text"
           placeholder="Email"
@@ -53,7 +54,7 @@ const AuthForm = () => {
           value={email}
           onChange={onChange}
         />
-        <input
+        <TextInput
           name="password"
           type="password"
           placeholder="Password"
@@ -61,17 +62,44 @@ const AuthForm = () => {
           value={password}
           onChange={onChange}
         />
-        <input
+        <Error>{error}</Error>
+        <SubmitButton
+          marginTop="1rem"
           type="submit"
           value={newAccount ? 'Create Account' : 'Sign In'}
         />
-        {error}
-      </form>
-      <span onClick={toggleAccount}>
+      </Form>
+      <SwitchButton onClick={toggleAccount}>
         {newAccount ? 'Sign in' : 'Create Account'}
-      </span>
+      </SwitchButton>
     </>
   );
 };
 
 export default AuthForm;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TextInput = styled.input`
+  border: solid 1px #eee;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+`;
+
+const Error = styled.p`
+  font-size: 0.8rem;
+  color: #d60000;
+`;
+
+const SwitchButton = styled.p`
+  text-align: center;
+  margin-top: 1rem;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
