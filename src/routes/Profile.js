@@ -1,15 +1,17 @@
 import { authService, dbService } from 'fbase';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
-import { updateProfile } from 'firebase/auth';
+import { deleteUser, updateProfile } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Main } from './Home';
 import { SubmitButton } from 'components/KiweetGenerator';
+import { Error } from 'components/AuthForm';
 
 const Profile = ({ userObj, refreshUser }) => {
   const navigate = useNavigate();
   const [newDisplayName, setnewDisplayName] = useState(userObj.displayName);
+  const [display, setDisplay] = useState(false);
   const [myKiweets, setMyKiweets] = useState([]);
 
   const onLogOutClick = () => {
@@ -40,6 +42,12 @@ const Profile = ({ userObj, refreshUser }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    if (newDisplayName === null) {
+      setDisplay(true);
+      return;
+    } else {
+      setDisplay(false);
+    }
     if (userObj.displayName !== newDisplayName) {
       await updateProfile(authService.currentUser, {
         displayName: newDisplayName,
@@ -47,6 +55,24 @@ const Profile = ({ userObj, refreshUser }) => {
     }
     refreshUser();
     alert('Your profile is updated!');
+  };
+
+  const onDeactivateClick = async () => {
+    const confirm = window.confirm(
+      `Once you proceed this action, it cannot be undone. All of your data will be deleted and your account will be permanently closed .\nDo you wish to deactivate your account?`,
+    );
+    if (confirm) {
+      try {
+        const result = await deleteUser(authService.currentUser);
+        console.log(result);
+        alert(`Your account is successfully deactivated. `);
+        navigate('/');
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      return;
+    }
   };
 
   return (
@@ -60,11 +86,21 @@ const Profile = ({ userObj, refreshUser }) => {
             onChange={onChange}
             maxLength="50"
           />
-          <UpdateButton width="10rem" type="submit" value="Update Profile" />
+          {display && (
+            <ErrorMsg>Username should be longer than 3 letters.</ErrorMsg>
+          )}
+          <UpdateButton
+            type="submit"
+            value="Update Profile"
+            marginTop={'1rem'}
+          />
         </Form>
         <LogoutButton as="button" onClick={onLogOutClick}>
           Log out
         </LogoutButton>
+        <DeactivateButton as="button" onClick={onDeactivateClick}>
+          Deactivate
+        </DeactivateButton>
       </Container>
     </Main>
   );
@@ -95,7 +131,6 @@ const EditNameInput = styled.input`
   font-weight: 500;
   padding: 0.7rem 0;
   border-bottom: solid 1px #eee;
-  margin-bottom: 1rem;
 `;
 
 const UpdateButton = styled(SubmitButton)`
@@ -107,6 +142,21 @@ const LogoutButton = styled(SubmitButton)`
   color: #aaa;
   width: 10rem;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+`;
+
+const ErrorMsg = styled(Error)`
+  margin-top: 0.5rem;
+`;
+
+const DeactivateButton = styled(SubmitButton)`
+  width: 10rem;
+  background-color: #eee;
+  color: #d60000;
+  margin-top: 0.5rem;
+  &:hover {
+    background-color: rgba(165, 4, 4, 0.7);
+    color: #fff;
   }
 `;
