@@ -145,7 +145,6 @@ const AuthContainer = styled.div`
   p {
     font-family: 'Kanit', sans-serif;
   }
-
   @media screen and (max-width: 500px) {
     grid-column: 1/2;
     grid-row: 1/2;
@@ -158,6 +157,7 @@ const AuthContainer = styled.div`
 export const Logo = styled.img`
   width: ${(props) => props.size};
   margin-bottom: ${(props) => props.marginBottom};
+  margin-left: ${(props) => props.marginLeft};
 `;
 
 export const Text = styled.p`

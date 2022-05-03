@@ -1,7 +1,8 @@
 import AppRouter from './Router';
 import { useEffect, useState } from 'react';
 import { authService } from 'fbase';
-
+import Navigation from './Navigation';
+import styled from 'styled-components';
 import 'App.css';
 
 function App() {
@@ -34,7 +35,11 @@ function App() {
   };
 
   return (
-    <>
+    <Container
+      display={Boolean(userObj) ? 'flex' : 'block'}
+      justifyContent={Boolean(userObj) ? 'center' : ''}
+    >
+      {Boolean(userObj) && <Navigation userObj={userObj} />}
       {init ? (
         <AppRouter
           isLoggedIn={Boolean(userObj)}
@@ -44,8 +49,22 @@ function App() {
       ) : (
         'Initializing...'
       )}
-    </>
+    </Container>
   );
 }
 
 export default App;
+
+const Container = styled.div`
+  display: ${(props) => props.display};
+  justify-content: ${(props) => props.justifyContent};
+  @media screen and (max-width: 1000px) {
+    position: relative;
+    display: flex;
+  }
+`;
+
+Container.defaultProps = {
+  display: 'block',
+  justifyContent: 'normal',
+};

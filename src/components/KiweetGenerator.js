@@ -97,7 +97,6 @@ const Form = styled.form`
 `;
 
 const TextInputContainer = styled.div`
-  border-bottom: solid 1px #eee;
   margin-bottom: 1rem;
 `;
 
@@ -115,9 +114,6 @@ const TextInput = styled.textarea`
 const AttachmentWrapper = styled.div`
   position: relative;
   button {
-    &:hover {
-      cursor: pointer;
-    }
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
@@ -125,6 +121,10 @@ const AttachmentWrapper = styled.div`
     position: absolute;
     top: 1rem;
     left: 1rem;
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
     svg {
       vertical-align: bottom;
     }
@@ -137,12 +137,13 @@ const AttachmentWrapper = styled.div`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   label {
     box-sizing: border-box;
     border-radius: 50%;
     padding: 0.7rem;
+    margin-right: 0.7rem;
     &:hover {
       cursor: pointer;
       background-color: rgba(222, 238, 241, 0.8);
@@ -154,7 +155,7 @@ const FileInput = styled.input`
   display: none;
 `;
 
-const SubmitButton = styled.input`
+export const SubmitButton = styled.input`
   background-color: #128b72;
   color: #fff;
   box-sizing: border-box;

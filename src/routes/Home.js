@@ -11,9 +11,12 @@ import Kiweet from 'components/Kiweet';
 import KiweetGenerator from 'components/KiweetGenerator';
 import styled from 'styled-components';
 import Navigation from 'components/Navigation';
+import { useLocation } from 'react-router-dom';
+import Profile from './Profile';
 
 const Home = ({ userObj }) => {
   const [kiweets, setKiweets] = useState([]);
+  const location = useLocation();
 
   const getKiweets = async () => {
     const q = query(
@@ -34,8 +37,7 @@ const Home = ({ userObj }) => {
   }, []);
 
   return (
-    <Container>
-      {Boolean(userObj) && <Navigation userObj={userObj} />}
+    <Main>
       <HomeFeedContainer>
         <KiweetGenerator userObj={userObj} />
         {kiweets.length !== 0 ? (
@@ -56,20 +58,21 @@ const Home = ({ userObj }) => {
           <p>No Kiweets here. Please write your first Kiweet.</p>
         )}
       </HomeFeedContainer>
-    </Container>
+      ){location.pathname === '/profile' && <Profile />}
+    </Main>
   );
 };
 
 export default Home;
 
-const Container = styled.div`
+export const Main = styled.main`
   max-width: 1024px;
-  margin: 0 auto;
-  display: flex;
-  background-color: #fff;
+  @media screen and (max-width: 500px) {
+    min-width: 100%;
+  }
 `;
 
-const HomeFeedContainer = styled.div`
+export const HomeFeedContainer = styled.div`
   border-left: solid 1px #eee;
   border-right: solid 1px #eee;
 `;
