@@ -6,11 +6,13 @@ import {
 } from 'firebase/auth';
 import styled from 'styled-components';
 import { SubmitButton } from './KiweetGenerator';
+import { useNavigate } from 'react-router-dom';
 
 const AuthForm = ({ newAccount, setNewAccount }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const onChange = (event) => {
     const {
@@ -32,6 +34,10 @@ const AuthForm = ({ newAccount, setNewAccount }) => {
           email,
           password,
         );
+        alert(
+          `Sign-up Success! We're taking you to Profile page to set up your username.`,
+        );
+        navigate('/profile');
       } else {
         data = await signInWithEmailAndPassword(authService, email, password);
       }
@@ -90,7 +96,7 @@ const TextInput = styled.input`
   border-radius: 0.5rem;
 `;
 
-const Error = styled.p`
+export const Error = styled.p`
   font-size: 0.8rem;
   color: #d60000;
 `;
