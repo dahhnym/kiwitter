@@ -1,15 +1,13 @@
 # Kiwitter
-
-<div style="display: flex; justify-content: center;">
-<img src="https://user-images.githubusercontent.com/74545780/166619209-81b41533-bceb-4f49-9f2e-d1499fea8f92.png" width="200px"  />
-</div>
 <br>
-<br>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74545780/166619209-81b41533-bceb-4f49-9f2e-d1499fea8f92.png" width="200px"/>
+<p>
 <br>
 
 ## :pencil: 개요
 
-- 트위터의 UI 및 실시간 CRUD 기능 등을 영감을 받아 만든 **소셜네트워크 서비스**입니다.
+- 트위터에서 영감을 받아 만든 **소셜네트워크 서비스**입니다.
 - 이메일 회원가입 혹은 Google, Github 소셜로그인을 통해 간편하고 빠르게 로그인할 수 있습니다.
 - 프로필 페이지에서 사용자 이름을 변경할 수 있고, 서비스 이용을 더이상 원하지 않을 시 계정을 삭제할 수 있습니다.
 - 글 등록 시 사진을 첨부할 수 있습니다.
