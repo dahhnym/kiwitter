@@ -93,5 +93,11 @@ Password : 12345678
             timeStamp.js
 ```
 
+## 추후 구현 예정
+[] 모바일뷰
+[] 좋아요 기능
+[] 답글 기능
+[] 프로필 사진 설정 기능
+
 <br>
 <p align="right"><a href="#top">[TOP]</a></p>
