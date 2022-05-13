@@ -1,4 +1,4 @@
-# Kiwitter
+<h1 id="top">Kiwitter</h1>
 <br>
 <p align="center">
   <img src="https://user-images.githubusercontent.com/74545780/166619209-81b41533-bceb-4f49-9f2e-d1499fea8f92.png" width="200px"/>
@@ -92,12 +92,14 @@ Password : 12345678
     └─utils
             timeStamp.js
 ```
+<br>
 
 ## 추후 구현 예정
-[] 모바일뷰
-[] 좋아요 기능
-[] 답글 기능
-[] 프로필 사진 설정 기능
+
+- [ ] 모바일뷰
+- [ ] 좋아요 기능
+- [ ] 답글 기능
+- [ ] 프로필 사진 설정 기능
 
 <br>
 <p align="right"><a href="#top">[TOP]</a></p>
